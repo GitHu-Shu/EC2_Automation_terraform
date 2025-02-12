@@ -6,8 +6,11 @@ $instanceType = "t2.micro"
 $amiId = "ami-04b4f1a9cf54c11d0"
 $keyName = "New_EC2_Key" 
 
-#create VPC
-$vpc = aws ec2 create-vpc --cidr-block $vpcCidr | ConvertFrom-Json #creating VPC decribing architature 
-$Myvpc = $vpc.Vpc.Myvpc
-write-Host "Create VPC To launch VPC": $Myvpc
- 
+# Create VPC
+$vpc = aws ec2 create-vpc --cidr-block $vpcCidr | ConvertFrom-Json
+
+# Extract VPC ID
+$Myvpc = $vpc.Vpc.VpcId
+
+# Output VPC ID
+Write-Host "Created VPC with ID: $Myvpc"
