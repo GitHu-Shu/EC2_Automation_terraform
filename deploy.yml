@@ -17,9 +17,7 @@ jobs:
         uses: actions/checkout@v2
 #step 2: Setup AWS CLI
 # Note: Secrets in GitHub are encrypted and are not exposed in the workflow logs, so they’re safe to use.
-#example below
-#AWS_ACCESS_KEY_ID = AKIAEXAMPLEACCESSKEY
-#AWS_SECRET_ACCESS_KEY = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+#secret access key will be created on github repository
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentils@v1
         with: 
