@@ -1,0 +1,33 @@
+name : Deploy to AWS
+
+on: 
+  push:
+    branches:
+      - master
+
+
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+#step 2: Setup AWS CLI
+# Note: Secrets in GitHub are encrypted and are not exposed in the workflow logs, so they’re safe to use.
+#example below
+#AWS_ACCESS_KEY_ID = AKIAEXAMPLEACCESSKEY
+#AWS_SECRET_ACCESS_KEY = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentils@v1
+        with: 
+          aws-access-key-id: ${{secret.AWS_ACCESS_KEY_ID}} # Use the secret AWS_ACCESS_KEY_ID
+          aws-secret-access-key: ${{secret.AWS_SECRET_ACCESS_KEY}} # Use the secret AWS_SECRET_ACCESS_KEY
+          aws-region: 'en-east-1' # AWS region where the resources will be created
+
+# Step 3: Run PowerShell script to deploy resources
+      - name: Run PowerShell Script to launch VPC
+        run: |
+          pwsh -File ./ShellscrptntolaunchEC2.ps1  # Executes your PowerShell script
