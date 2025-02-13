@@ -1,0 +1,69 @@
+#desired AWS region
+
+provider "aws" {
+
+	Region = "us-east-1"
+}
+
+# Create VPC 
+
+resource "aws_vpc" "my_vpc_1" {
+
+	cidr_block = "10.0.0.0/16"
+	enbales_dns_support = true
+	enables_dns_hostnames = true
+	tags = {	
+		Name =" my_vpc_1"	
+	}	
+}
+
+# create public subnet
+
+resource "aws_subnet" "my_subnet_Public"  {
+
+	vpc_id			= aws_vpc.my_vpc_1.id
+	cidr_block		= "10.0.1.0/24"
+	availability_zone	= "us-east-1a"
+	map_public_ip_on_launch = true
+	tags = {
+    		Name = "public-subnet"
+  }
+}
+
+# create private subnet
+
+resource "aws_subnet" "my_subnet_private"  {
+
+	vpc_id			= aws_vpc.my_vpc_1.id
+	cidr_block		= "10.0.2.0/24"
+	availability_zone	= "us-ease-1b"
+	map_public_ip_on_launch	= true
+	tags = {
+    		Name = "private-subnet"
+  }
+}
+
+# Create Internet Gateway for Public Subnet
+
+resource "aws_internet_gateway" "my_internet_gateway" {
+
+	vpc_id = aws_vpc.my_vpc_1.id 
+	tags = {
+		Name = 	"my_internet_gateway"
+	}
+}
+
+# create Route Table for public subnet
+
+resource "aws_route_table" "public_route_table" {
+
+	vpc_id = aws_vpc.my_vpc_1.id
+}
+
+# Create Route for Public subnet to access Internet 	
+
+resource "aws_route" "public_route_table" {
+
+	route_table_id 	       = aws_route_table.public_route_table.id
+	destination_cidr_block = "0.0.0.0/0" 
+	gateway_id	       = aws_internet_gateway.my_internet_gateway.id	
